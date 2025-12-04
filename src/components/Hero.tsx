@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import type { ShowContent } from '../types';
@@ -9,10 +9,29 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ content, image }) => {
-  const scrollToDates = () => {
-    const element = document.getElementById('dates');
-    element?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    let hideTimer: ReturnType<typeof setTimeout>;
+
+    const startCycle = () => {
+      setIsVisible(true);
+      hideTimer = setTimeout(() => {
+        setIsVisible(false);
+      }, 5000); // Text stays for 5 seconds before fading out
+    };
+
+    // Start initial cycle
+    startCycle();
+
+    // Loop every 20 seconds
+    const loopInterval = setInterval(startCycle, 20000);
+
+    return () => {
+      clearTimeout(hideTimer);
+      clearInterval(loopInterval);
+    };
+  }, [content.title]); // Re-run effect when the show title changes
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-theater-primary">
@@ -22,7 +41,7 @@ export const Hero: React.FC<HeroProps> = ({ content, image }) => {
           <img 
             src={image} 
             alt={content.title} 
-            className="h-full w-full object-cover opacity-60"
+            className={`h-full w-full object-cover opacity-60 ${content.heroAlignTop ? 'object-top' : ''}`}
           />
         ) : (
           <div className="h-full w-full bg-gradient-to-br from-gray-900 to-gray-800" />
@@ -34,7 +53,7 @@ export const Hero: React.FC<HeroProps> = ({ content, image }) => {
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -20 }}
           transition={{ duration: 0.8 }}
           className="max-w-4xl"
         >
@@ -47,14 +66,6 @@ export const Hero: React.FC<HeroProps> = ({ content, image }) => {
           <p className="mb-8 text-xl text-theater-light/90 md:text-2xl font-light italic">
             {content.tagline}
           </p>
-          
-          <button
-            onClick={scrollToDates}
-            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-theater-accent px-8 py-4 text-lg font-semibold text-theater-primary transition-all hover:bg-white hover:text-theater-primary"
-          >
-            <span>Bestill billetter</span>
-            <ChevronDown className="h-5 w-5 transition-transform group-hover:translate-y-1" />
-          </button>
         </motion.div>
       </div>
 

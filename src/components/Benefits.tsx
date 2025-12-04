@@ -34,11 +34,11 @@ export const Benefits: React.FC<BenefitsProps> = ({ content }) => {
             
             {/* Optional Image */}
             {content.image && (
-              <div className="mb-8 overflow-hidden rounded-xl">
+              <div className="mb-8 rounded-xl bg-black/40">
                 <img 
                   src={content.image} 
                   alt="Bedriftsevent" 
-                  className="h-64 w-full object-cover transition-transform duration-500 hover:scale-105"
+                  className="w-full max-h-[520px] object-contain mx-auto transition-transform duration-500 hover:scale-[1.02]"
                 />
               </div>
             )}

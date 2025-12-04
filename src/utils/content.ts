@@ -1,10 +1,12 @@
 import yaml from 'js-yaml';
 import type { ShowContent, GroupContent, DatesContent, ImageAsset } from '../types';
 
-// Import markdown files as raw strings
-import showMd from '../content/show.md?raw';
-import groupsMd from '../content/groups.md?raw';
-import datesMd from '../content/dates.md?raw';
+// Load all content and images eagerly
+const markdownFiles = import.meta.glob('../content/*/*.md', { query: '?raw', import: 'default', eager: true });
+const heroImages = import.meta.glob('../assets/images/*/hero/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
+const galleryImages = import.meta.glob('../assets/images/*/gallery/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
+const businessImages = import.meta.glob('../assets/images/*/business/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
+const audienceImages = import.meta.glob('../assets/images/audience/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
 
 export const parseMarkdown = <T>(markdown: string): T & { body: string } => {
   const parts = markdown.split('---\n');
@@ -19,41 +21,61 @@ export const parseMarkdown = <T>(markdown: string): T & { body: string } => {
   return { ...data, body };
 };
 
-export const getShowContent = (): ShowContent => {
-  return parseMarkdown<Omit<ShowContent, 'body'>>(showMd);
+const getMarkdownFile = (playId: string, filename: string): string => {
+  const path = `../content/${playId}/${filename}.md`;
+  const content = markdownFiles[path];
+  if (!content) {
+    console.warn(`Markdown file not found: ${path}`);
+    return '';
+  }
+  return content as string;
 };
 
-export const getGroupContent = (): GroupContent => {
-  const content = parseMarkdown<Omit<GroupContent, 'body'>>(groupsMd);
+export const getShowContent = (playId: string): ShowContent => {
+  const markdown = getMarkdownFile(playId, 'show');
+  return parseMarkdown<Omit<ShowContent, 'body'>>(markdown);
+};
+
+export const getGroupContent = (playId: string): GroupContent => {
+  const markdown = getMarkdownFile(playId, 'groups');
+  const content = parseMarkdown<Omit<GroupContent, 'body'>>(markdown);
   
-  // Logic to get the business image
-  const modules = import.meta.glob('../assets/images/business/*.{jpg,jpeg,png,webp}', { eager: true });
-  const path = Object.keys(modules)[0];
-  const imageSrc = path ? (modules[path] as { default: string }).default : undefined;
+  // Logic to get the business image for this play
+  const imagePath = Object.keys(businessImages).find(path => path.includes(`/images/${playId}/business/`));
+  const imageSrc = imagePath ? (businessImages[imagePath] as { default: string }).default : undefined;
 
   return { ...content, image: imageSrc };
 };
 
-export const getDatesContent = (): DatesContent => {
-  return parseMarkdown<Omit<DatesContent, 'body'>>(datesMd);
+export const getDatesContent = (playId: string): DatesContent => {
+  const markdown = getMarkdownFile(playId, 'dates');
+  return parseMarkdown<Omit<DatesContent, 'body'>>(markdown);
 };
 
-export const getHeroImage = (): string => {
-  // Using eager loading for the hero image
-  const modules = import.meta.glob('../assets/images/hero/*.{jpg,jpeg,png,webp}', { eager: true });
-  const path = Object.keys(modules)[0];
-  return path ? (modules[path] as { default: string }).default : '';
+export const getHeroImage = (playId: string): string => {
+  const imagePath = Object.keys(heroImages).find(path => path.includes(`/images/${playId}/hero/`));
+  return imagePath ? (heroImages[imagePath] as { default: string }).default : '';
 };
 
-export const getGalleryImages = (): ImageAsset[] => {
-  const modules = import.meta.glob('../assets/images/gallery/*.{jpg,jpeg,png,webp}', { eager: true });
-  
-  return Object.keys(modules)
+export const getGalleryImages = (playId: string): ImageAsset[] => {
+  return Object.keys(galleryImages)
+    .filter(path => path.includes(`/images/${playId}/gallery/`))
     .sort((a, b) => {
       return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
     })
     .map((path) => ({
-      src: (modules[path] as { default: string }).default,
+      src: (galleryImages[path] as { default: string }).default,
       alt: path.split('/').pop()?.split('.')[0] || 'Gallery image',
+    }));
+};
+
+export const getAudienceImages = (): ImageAsset[] => {
+  return Object.keys(audienceImages)
+    .sort((a, b) => {
+      return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+    })
+    .map((path) => ({
+      src: (audienceImages[path] as { default: string }).default,
+      alt: path.split('/').pop()?.split('.')[0] || 'Audience image',
     }));
 };

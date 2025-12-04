@@ -1,7 +1,11 @@
 export interface ShowContent {
   title: string;
   tagline: string;
+  description?: string; // Added description field for homepage short text
+  premiere?: string;    // Added premiere field for homepage
   body: string;
+  // Optional per-play hero layout controls, editable via markdown frontmatter
+  heroAlignTop?: boolean;
 }
 
 export interface Benefit {
@@ -24,11 +28,22 @@ export interface ShowDate {
   status: 'available' | 'few_left' | 'sold_out';
 }
 
+export interface RecurringScheduleItem {
+  day: string;
+  time: string;
+}
+
+export interface RecurringSchedule {
+  period: string;
+  schedule: RecurringScheduleItem[];
+}
+
 export interface DatesContent {
   heading: string;
   contact_phone: string;
   contact_email: string;
-  shows: ShowDate[];
+  shows?: ShowDate[];
+  recurring?: RecurringSchedule;
   body: string;
 }
 

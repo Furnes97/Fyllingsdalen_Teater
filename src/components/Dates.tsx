@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 import type { DatesContent } from '../types';
 import { Calendar, Clock, Phone, Mail, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 
@@ -67,7 +68,38 @@ export const Dates: React.FC<DatesProps> = ({ content }) => {
         </motion.div>
 
         <div className="space-y-4">
-          {content.shows.map((show, index) => {
+          {content.recurring ? (
+            content.recurring.schedule.map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group flex flex-col gap-4 rounded-lg border border-white/5 bg-white/5 p-6 transition-colors hover:border-theater-accent/50 hover:bg-white/10 md:flex-row md:items-center md:justify-between"
+              >
+                <div className="flex items-center gap-6">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-theater-primary border border-white/10 text-theater-accent">
+                    <Calendar className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-white capitalize">
+                      {item.day}
+                    </h3>
+                    <div className="flex items-center gap-2 text-gray-400">
+                      <Clock className="h-4 w-4" />
+                      <span>kl. {item.time}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 rounded-full px-4 py-2 bg-theater-accent/10 text-theater-accent">
+                  <span className="text-sm font-medium">{content.recurring?.period}</span>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            content.shows?.map((show, index) => {
             const status = getStatusConfig(show.status);
             const StatusIcon = status.icon;
 
@@ -101,7 +133,8 @@ export const Dates: React.FC<DatesProps> = ({ content }) => {
                 </div>
               </motion.div>
             );
-          })}
+          })
+          )}
         </div>
 
         <motion.div
@@ -111,9 +144,9 @@ export const Dates: React.FC<DatesProps> = ({ content }) => {
           className="mt-16 rounded-2xl bg-theater-accent p-8 text-center text-theater-primary"
         >
           <h3 className="mb-6 font-serif text-2xl font-bold">Kontakt oss for bestilling</h3>
-          <p className="mb-8 text-lg opacity-90">
-            {content.body}
-          </p>
+          <div className="mb-8 text-lg opacity-90 prose prose-invert mx-auto text-theater-primary prose-a:text-theater-primary prose-a:underline hover:prose-a:text-white">
+            <ReactMarkdown>{content.body}</ReactMarkdown>
+          </div>
           <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-12">
             <a 
               href={`tel:${content.contact_phone.replace(/\s/g, '')}`}
