@@ -3,6 +3,7 @@ export interface ShowContent {
   tagline: string;
   description?: string; // Added description field for homepage short text
   premiere?: string;    // Added premiere field for homepage
+  playing_period?: string; // Added playing_period field for homepage
   body: string;
   // Optional per-play hero layout controls, editable via markdown frontmatter
   heroAlignTop?: boolean;
