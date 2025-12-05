@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { motion } from 'framer-motion';
-import { getHeroImage, getShowContent, getAudienceImages } from '../utils/content';
+import { getHeroImage, getShowContent, getAudienceImages, getAllGalleryImages } from '../utils/content';
+import { ProductionCarousel } from '../components/ProductionCarousel';
 
 export const HomePage: React.FC = () => {
   const plays = [
@@ -28,6 +29,9 @@ export const HomePage: React.FC = () => {
 
   // Get images for the audience section
   const audienceImages = getAudienceImages().slice(0, 4);
+  
+  // Get all gallery images from all plays for production carousel
+  const productionImages = getAllGalleryImages();
 
   return (
     <div className="bg-theater-primary min-h-screen font-sans text-theater-light">
@@ -98,6 +102,11 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Production Quality Carousel Section */}
+      {productionImages.length > 0 && (
+        <ProductionCarousel images={productionImages} />
+      )}
 
       {/* Audience Experience Section */}
       <section className="bg-zinc-900 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">

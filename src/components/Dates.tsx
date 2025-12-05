@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import type { DatesContent } from '../types';
@@ -6,9 +7,10 @@ import { Calendar, Clock, Phone, Mail, CheckCircle, AlertCircle, XCircle } from 
 
 interface DatesProps {
   content: DatesContent;
+  playTitle?: string;
 }
 
-export const Dates: React.FC<DatesProps> = ({ content }) => {
+export const Dates: React.FC<DatesProps> = ({ content, playTitle }) => {
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'available':
@@ -45,11 +47,10 @@ export const Dates: React.FC<DatesProps> = ({ content }) => {
   // Format date to Norwegian readable format
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return new Intl.DateTimeFormat('no-NO', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long'
-    }).format(date);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}:${month}:${year}`;
   };
 
   return (
@@ -147,6 +148,14 @@ export const Dates: React.FC<DatesProps> = ({ content }) => {
           <div className="mb-8 text-lg opacity-90 prose prose-invert mx-auto text-theater-primary prose-a:text-theater-primary prose-a:underline hover:prose-a:text-white">
             <ReactMarkdown>{content.body}</ReactMarkdown>
           </div>
+
+          <Link 
+            to={`/bestilling${playTitle ? `?play=${encodeURIComponent(playTitle)}` : ''}`}
+            className="mb-8 inline-flex items-center px-8 py-4 border border-theater-primary text-lg font-bold rounded-md text-theater-accent bg-theater-primary hover:bg-gray-900 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          >
+            Send bestillingsforespørsel
+          </Link>
+
           <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-12">
             <a 
               href={`tel:${content.contact_phone.replace(/\s/g, '')}`}

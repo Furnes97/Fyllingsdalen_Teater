@@ -25,7 +25,7 @@ export const PlayPage: React.FC<PlayPageProps> = ({
       <Hero content={showContent} image={heroImage} />
       <Showcase images={galleryImages} />
       <Benefits content={groupContent} />
-      <Dates content={datesContent} />
+      <Dates content={datesContent} playTitle={showContent.title} />
       
       <footer className="border-t border-white/10 py-8 text-center text-sm text-gray-500">
         <p>&copy; {new Date().getFullYear()} Fyllingsdalen Teater. Alle rettigheter reservert.</p>

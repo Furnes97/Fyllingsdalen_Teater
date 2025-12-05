@@ -79,3 +79,16 @@ export const getAudienceImages = (): ImageAsset[] => {
       alt: path.split('/').pop()?.split('.')[0] || 'Audience image',
     }));
 };
+
+export const getAllGalleryImages = (): ImageAsset[] => {
+  const allImages: ImageAsset[] = [];
+  
+  // Get gallery images from all plays
+  ['play1', 'play2', 'play3'].forEach((playId) => {
+    const playImages = getGalleryImages(playId);
+    allImages.push(...playImages);
+  });
+  
+  // Shuffle to mix images from different plays
+  return allImages.sort(() => Math.random() - 0.5);
+};

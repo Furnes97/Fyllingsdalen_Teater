@@ -10,23 +10,13 @@ export const Navbar: React.FC = () => {
     { name: 'Hjem', path: '/' },
     { name: 'Ronja Røverdatter', path: '/ronja-roverdatter' },
     { name: 'Hakkebakkeskogen', path: '/hakkebakkeskogen' },
-    { name: 'I Blanke messingen', path: '/i-blanke-messingen' },
+    { name: 'I Blanke Messingen', path: '/i-blanke-messingen' },
+    { name: 'Bestill Billetter', path: '/bestilling' },
   ];
 
   const isActive = (path: string) => {
     return location.pathname === path;
   };
-
-  const scrollToDates = () => {
-    const element = document.getElementById('dates');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsOpen(false); // Close mobile menu if open
-  };
-
-  // Only show button on play pages (not home page)
-  const isPlayPage = location.pathname !== '/';
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-theater-primary/90 backdrop-blur-sm border-b border-white/10">
@@ -39,7 +29,7 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-4">
+            <div className="ml-10 flex items-baseline space-x-4">
               {links.map((link) => (
                 <Link
                   key={link.name}
@@ -53,14 +43,6 @@ export const Navbar: React.FC = () => {
                   {link.name}
                 </Link>
               ))}
-              {isPlayPage && (
-                <button
-                  onClick={scrollToDates}
-                  className="ml-4 rounded-full bg-theater-accent px-6 py-2 text-sm font-semibold text-theater-primary transition-all hover:bg-white hover:text-theater-primary"
-                >
-                  Bestill billetter
-                </button>
-              )}
             </div>
           </div>
 
@@ -94,14 +76,6 @@ export const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
-            {isPlayPage && (
-              <button
-                onClick={scrollToDates}
-                className="block w-full mt-2 rounded-full bg-theater-accent px-6 py-3 text-base font-semibold text-theater-primary transition-all hover:bg-white hover:text-theater-primary"
-              >
-                Bestill billetter
-              </button>
-            )}
           </div>
         </div>
       )}

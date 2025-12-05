@@ -3,6 +3,7 @@ import { Navbar } from './components/Navbar';
 import { ScrollToTop } from './components/ScrollToTop';
 import { HomePage } from './pages/HomePage';
 import { PlayPage } from './pages/PlayPage';
+import { BookingPage } from './pages/BookingPage';
 import { 
   getShowContent, 
   getHeroImage, 
@@ -43,6 +44,7 @@ function App() {
           path="/i-blanke-messingen" 
           element={<PlayPage {...play3Data} />} 
         />
+        <Route path="/bestilling" element={<BookingPage />} />
       </Routes>
     </Router>
   );
