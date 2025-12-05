@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Calendar, Mail, User, MessageSquare, Phone, Ticket, Theater, Clock } from 'lucide-react';
 import { DayPicker } from 'react-day-picker';
-import { format, parse, isValid } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import 'react-day-picker/style.css';
 import playsData from '../data/plays.json';
