@@ -107,7 +107,7 @@ export const ProductionCarousel: React.FC<ProductionCarouselProps> = ({ images }
           onMouseLeave={() => setIsPaused(false)}
         >
           {/* Main Carousel Image */}
-          <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-lg bg-gray-900 overflow-hidden">
+          <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-lg bg-gray-900 overflow-hidden flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
@@ -115,14 +115,14 @@ export const ProductionCarousel: React.FC<ProductionCarouselProps> = ({ images }
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.6, ease: 'easeInOut' }}
-                className="absolute inset-0"
+                className="absolute inset-0 flex items-center justify-center"
               >
                 <img
                   src={currentImage.src}
                   alt={currentImage.alt}
-                  className="w-full h-full object-cover"
+                  className="max-w-full max-h-full w-auto h-auto object-contain"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               </motion.div>
             </AnimatePresence>
 
