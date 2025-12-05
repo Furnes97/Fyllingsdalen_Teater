@@ -13,4 +13,4 @@ benefits:
     icon: "Lightbulb"
     description: "La dere inspirere av scenekunst i verdensklasse rett i nabolaget."
 ---
-Ta kontakt for et skreddersydd opplegg som passer din gruppe. Vi kan ordne alt fra enkle billettpakker til helaftens opplevelser med mat og drikke.
+Ta kontakt for et skreddersydd opplegg som passer din gruppe.

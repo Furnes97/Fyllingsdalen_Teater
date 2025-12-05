@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import type { ShowContent } from '../types';
+import { Dice } from './Dice';
 
 interface HeroProps {
   content: ShowContent;
@@ -18,7 +19,7 @@ export const Hero: React.FC<HeroProps> = ({ content, image }) => {
       setIsVisible(true);
       hideTimer = setTimeout(() => {
         setIsVisible(false);
-      }, 5000); // Text stays for 5 seconds before fading out
+      }, 8000); // Text stays for 5 seconds before fading out
     };
 
     // Start initial cycle
@@ -73,6 +74,22 @@ export const Hero: React.FC<HeroProps> = ({ content, image }) => {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-white/50">
         <ChevronDown className="h-8 w-8" />
       </div>
+
+      {/* Review Dice (Bottom Right - Moved Up) */}
+      {content.reviews && content.reviews.length > 0 && (
+        <div className="absolute bottom-24 right-8 z-30 flex flex-col gap-6">
+          {content.reviews.map((review, index) => (
+            <div key={index} className="transform rotate-6 hover:rotate-0 transition-transform duration-300">
+              <Dice
+                score={review.score}
+                reviewer={review.reviewer}
+                reviewUrl={review.reviewUrl}
+                size="extra-large"
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 };

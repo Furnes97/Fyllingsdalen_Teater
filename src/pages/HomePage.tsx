@@ -79,12 +79,12 @@ export const HomePage: React.FC = () => {
                       </div>
                     )}
                   </div>
-                  <div className="p-6 flex flex-col flex-grow">
+                  <div className="p-6 flex flex-col flex-grow min-h-[280px]">
                     <div className="flex justify-between items-start mb-2">
                        <h2 className="text-2xl font-serif font-bold text-theater-accent">{play.content.title}</h2>
                     </div>
                     <p className="text-gray-300 mb-2 font-medium">{play.content.tagline}</p>
-                    <div className="text-gray-400 mb-6 flex-grow text-sm prose prose-invert prose-sm max-w-none">
+                    <div className="text-gray-400 mb-6 flex-grow text-sm prose prose-invert prose-sm max-w-none min-h-[80px]">
                       <ReactMarkdown>{play.content.description || ''}</ReactMarkdown>
                     </div>
                     <div className="mt-auto space-y-4">
@@ -102,11 +102,6 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Production Quality Carousel Section */}
-      {productionImages.length > 0 && (
-        <ProductionCarousel images={productionImages} />
-      )}
 
       {/* Audience Experience Section */}
       <section className="bg-zinc-900 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -143,8 +138,30 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <footer className="border-t border-white/10 py-8 text-center text-sm text-gray-500 bg-theater-primary">
+      {/* Production Quality Carousel Section */}
+      {productionImages.length > 0 && (
+        <ProductionCarousel images={productionImages} />
+      )}
+
+      <footer className="border-t border-white/10 py-8 text-center text-sm text-gray-500 bg-theater-primary relative">
         <p>&copy; {new Date().getFullYear()} Fyllingsdalen Teater. Alle rettigheter reservert.</p>
+        
+        {/* Scroll to Top Button */}
+        <button 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="absolute right-12 bottom-12 p-4 bg-theater-accent text-theater-primary rounded-full hover:bg-white transition-colors shadow-lg group"
+          aria-label="Til toppen"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-8 w-8 transform group-hover:-translate-y-1 transition-transform" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+          </svg>
+        </button>
       </footer>
     </div>
   );
